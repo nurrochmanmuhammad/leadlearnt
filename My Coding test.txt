@@ -1,0 +1,288 @@
+Question 1 of 7
+===============
+
+Display three first letter of a given input string N times, but when the input is less then three, display in reverse.
+
+Example:
+
+displayMulti("Jakarta", 2) --> JakJak
+displayMulti("Jakarta", 3) --> JakJakJak
+displayMulti("BBM", 2) --> BBMBBM
+displayMulti("Or", 3) --> rOrOrO
+
+#Display three first letter of a given input string N times, but when the input is less then three, display in reverse.
+def displayMulti(words,times):
+    if len(words)>2:
+        print(words[0:3]*times)
+    else:
+        Print=words[0:len(words)]
+        print(Print[::-1]*times);
+
+#lets try
+displayMulti("Jakarta",2)
+displayMulti("Jakarta",3)
+displayMulti("BBM",2)
+displayMulti("Or",3)
+
+Question 2 of 7
+===============
+
+Assume you need to write a code for phone book. The input is parsed from comma & semi colon separated text. You are expected to use collection and Object Oriented approach as we are interested to see your skill on that.
+
+Input:
+Charlie,Zoe,08123123123;Andre,Xavier,08111222333;Charlie,Xyz,08123123123;Jean,Summers,08001001001
+
+Output:
+=== Output START ===
+Log:
+Charlie Zoe – 08123123123 : insert success
+Andre Xavier – 08111222333 : insert success
+Charlie Xyz – 08123123123 : duplicate phone number
+Jean Summers – 08001001001 : insert success
+
+Phone book:
+1. Andre Xavier – 08111222333
+2. Charlie Zoe – 08123123123
+3. Jean Summers – 08001001001
+=== Output END ===
+
+Example of answer template in Java:
+public class Solution2 {
+  public static void main(String[] args) {
+    String input = "Charlie,Zoe,08123123123;Andre,Xavier,08111222333;Charlie,Xyz,08123123123;Jean,Summers,08001001001";
+    // ...
+  }
+}
+
+import java.util.List;
+import java.util.ArrayList;
+
+public class Solution2
+{
+    public static void main(String[] args)
+    {
+        String input = "Charlie,Zoe,08123123123;Andre,Xavier,08111222333;Charlie,Xyz,08123123123;Jean,Summers,08001001001";
+        String[] stringContacts = input.split(";");
+
+        PhoneBook phoneBook = new PhoneBook();
+        System.out.println("=== Output START ===");
+        System.out.println("Log:");
+        for (String stringContact : stringContacts) {
+            String splitted[] =  stringContact.split(",");
+            
+            Contact contact = new Contact(splitted[0], splitted[1], splitted[2]);
+            phoneBook.add(contact);
+        }
+
+        System.out.println("");
+        phoneBook.print();
+        System.out.println("=== Output END ===");
+
+
+    }
+}
+
+class Contact
+{
+    private String firstName;
+    private String lastName;
+    private String phoneNumber;
+
+    public Contact(String firstName, String lastName, String phoneNumber)
+    {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getFirstName()
+    {
+        return this.firstName;
+    }
+
+    public String getLastName()
+    {
+        return this.lastName;
+    }
+
+    public String getPhoneNumber()
+    {
+        return this.phoneNumber;
+    }
+
+    public String getFullName()
+    {
+        return this.firstName + " " + this.lastName;
+    }
+
+    public String getInfo()
+    {
+        return this.getFullName() + " - " + this.getPhoneNumber();
+    }
+}
+
+class PhoneBook
+{
+    public List<Contact> contacts;
+
+    public PhoneBook()
+    {
+        this.contacts = new ArrayList<Contact>();
+    }
+
+    public void add(Contact contact)
+    {
+        boolean isNumberExists = this.isExists( contact.getPhoneNumber() );
+        if (! isNumberExists) {
+            this.contacts.add(contact);
+        }
+
+        System.out.println(
+            contact.getFullName() + " - " + contact.getPhoneNumber() +
+            " : " + (isNumberExists ? "duplicate phone number" : "insert success")
+        );
+    }
+
+    public void print()
+    {
+        System.out.println("Phone book:");
+        int i = 1;
+        for (Contact contact : this.contacts) {
+            System.out.println("" + (i++) + ". " + contact.getInfo());
+        }
+    }
+
+    protected boolean isExists(String number)
+    {
+        for (Contact contact : this.contacts) {
+            if (contact.getPhoneNumber().equals(number)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+}
+
+Question 3 of 7
+===============
+
+SQL
+
+Given the following tables of BBM messages:
+
+    \d messages
+                                       Table "messages"
+           Column      |            Type             |               Modifiers
+    --------------------+-----------------------------+----------------------------------------
+    id                 | integer                     | not null
+    sender_id          | integer                     | not null
+    text               | character varying           | not null default ''::character varying
+    secret_key         | character varying           | not null default ''::character varying
+    created_at         | timestamp without time zone | not null
+    delivered_at       | timestamp without time zone |
+    received_at        | timestamp without time zone |
+    attachment_id      | integer                     |
+
+    \d attachments
+              Table "attachments"
+      Column  |       Type        | Modifiers
+    ----------+-------------------+-----------
+    id        | integer           | not null
+    mime_type | character varying |
+    metadata  | character varying |
+    content   | blob              |
+
+a. Write some SQL (any flavor) to select all messages which has attachment of type “video/mp4”.
+
+b. Scope that query to messages delivered after 3 hours ago ordered by the latest first.
+
+c. What index would improve the performance of this query?
+
+Make sure your query works and meets the above requirements.
+
+a.  SELECT m.* FROM messages m JOIN attachments a ON a.id = m.attachment_id WHERE a.mime_type = 'video/mp4';
+
+b.  SELECT m.* FROM messages m JOIN attachments a ON a.id = m.attachment_id WHERE a.mime_type = 'video/mp4' AND m.delivered_at >= DATE_SUB(NOW(),INTERVAL 3 HOUR) ORDER BY m.delivered_at DESC;
+
+c.  attachment_id
+
+Question 4 of 7
+===============
+
+Suppose you built a spam detection model and in the test result is shown as below:
+| Actual   | Prediction |
+|----------|------------|
+| Spam     | Not Spam   |
+| Spam     | Not Spam   |
+| Spam     | Spam       |
+| Spam     | Spam       |
+| Not Spam | Not Spam   |
+| Not Spam | Spam       |
+| Not Spam | Not Spam   |
+| Spam     | Spam       |
+| Spam     | Spam       |
+| Not Spam | Not Spam   |
+
+Provide the value of these measurement:
+a. Accuracy
+b. Precision
+c. Recall
+
+| Actual   | Prediction |  Relevant     |
+|----------|------------|---------------|
+| Spam     | Not Spam   |FALSE NEGATIVE |
+| Spam     | Not Spam   |FALSE NEGATIVE |
+| Spam     | Spam       |TRUE POSITIVE  |
+| Spam     | Spam       |TRUE POSITIVE  |
+| Not Spam | Not Spam   |TRUE NEGATIVE  |
+| Not Spam | Spam       |FALSE POSITIVE |
+| Not Spam | Not Spam   |TRUE NEGATIVE  |
+| Spam     | Spam       |TRUE POSITIVE  |
+| Spam     | Spam       |TRUE POSITIVE  |
+| Not Spam | Not Spam   |TRUE NEGATIVE  |
+
+TRUE POSITIVE   4
+TRUE NEGATIVE   3
+FALSE POSITIVE  1
+FALSE NEGATIVE  2
+
+a. Accuracy:  (TP+TN)/(TP+TN+FP+FN)=7/10=0.7=70%
+b. Precission:TP/(TP+FP)=4/5=0.8=80%
+c. Recall:    TP/(TP+FN)=4/6=0.6667=66.67%
+
+
+Question 5 of 7
+===============
+
+a. What new programming languages / tools have you heard of? 
+
+b. Which ones are you interested in learning / using?
+
+c. Why?
+
+a. Kotlin, Swift, Ruby, Julia, CUDA, AWS, Keras, TensorFlow,and Azure.
+b. Kotlin, Swift, TensorFlow and Azure/AWS.
+c. I think that is a perfect combination to support connectivity and productivity in 4.0 era. Basically, I want to learn everything of programmer world from the bacic to the advance.
+
+Question 6 of 7
+===============
+
+a. Have you written any automated tests for your code?
+
+b. What type / level of tests did you write?
+
+c. What test framework or tools did you use?
+
+a. No, I have not.
+Programming is the most challenging aspect for me who just have mathematics and physics skill.
+
+Question 7 of 7
+===============
+
+Tell us about any project you did that you are proud of, and why you are proud of it. And maybe with some code snippet (~100 lines), or link to Github Gist you wrote for that project.
+
+I am not sure, to tell my project, but I did so many project that related to numerical simulation and matrix inversion. The majority of my projects are done by Matlab. You know that we are in geophysics are more concern about numerical and algorithm than its arts of building great software.
+
+The link for my works below,
+https://drive.google.com/drive/folders/1mYkYjMSBd05NcQg2F3eSxE0LsY_H9RK9?usp=sharing
